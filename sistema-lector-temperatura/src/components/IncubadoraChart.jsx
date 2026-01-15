@@ -7,28 +7,26 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer
+    ResponsiveContainer,
+    Brush // Importar Brush para el zoom
 } from 'recharts';
+
+const emptyTickFormatter = () => '';
 
 const IncubadoraChart = ({ data }) => {
     // Pre-procesar datos para el gráfico
     const chartData = useMemo(() => {
-        // Clona y revierte para que el gráfico vaya de izquierda (antiguo) a derecha (nuevo)
-        // Asumiendo que 'data' viene ordenado DESC por fecha/hora
+        // ... (resto del código igual)
         const reversed = [...data].reverse();
 
         return reversed.map(item => {
-            // Formatear fecha/hora corta para el eje X
-            // item.fecha: YYYY-MM-DD
-            // item.hora_intervalo: HH:mm:ss OR 1970-01-01THH:mm:ss.000Z
-
             const datePart = item.fecha && item.fecha.length >= 5
                 ? item.fecha.substring(5)
-                : item.fecha; // 2023-12-05 -> 12-05
+                : item.fecha;
 
             let timePart = item.hora_intervalo || "";
             if (timePart.includes("T")) {
-                timePart = timePart.split("T")[1].substring(0, 5); // 1970-01-01T14:00:00 -> 14:00
+                timePart = timePart.split("T")[1].substring(0, 5);
             } else if (timePart.length >= 5) {
                 timePart = timePart.substring(0, 5);
             }
@@ -38,7 +36,6 @@ const IncubadoraChart = ({ data }) => {
             return {
                 ...item,
                 label,
-                // Asegurarse de que sean números
                 temp_minima: parseFloat(item.temp_minima),
                 temp_maxima: parseFloat(item.temp_maxima),
                 temp_minima_2: parseFloat(item.temp_minima_2),
@@ -58,18 +55,14 @@ const IncubadoraChart = ({ data }) => {
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                     data={chartData}
-                    margin={{
-                        top: 5,
-                        right: 30,
-                        left: 0,
-                        bottom: 5,
-                    }}
+                    margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis
                         dataKey="label"
                         tick={{ fontSize: 10, fill: '#6b7280' }}
                         interval="preserveStartEnd"
+                        minTickGap={50}
                     />
                     <YAxis
                         tick={{ fontSize: 10, fill: '#6b7280' }}
@@ -80,47 +73,23 @@ const IncubadoraChart = ({ data }) => {
                         labelStyle={{ fontWeight: 'bold', color: '#374151' }}
                         itemStyle={{ fontSize: '12px' }}
                     />
-                    <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                    <Legend wrapperStyle={{ paddingTop: '10px' }} />
 
-                    {/* Sensor 1 */}
-                    <Line
-                        type="monotone"
-                        dataKey="temp_minima"
-                        name="T. Min (S1)"
-                        stroke="#3b82f6" // blue-500
-                        strokeWidth={2}
-                        dot={false}
-                        activeDot={{ r: 6 }}
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="temp_maxima"
-                        name="T. Max (S1)"
-                        stroke="#ef4444" // red-500
-                        strokeWidth={2}
-                        dot={false}
-                    />
+                    <Line type="monotone" dataKey="temp_maxima" name="S1 Max" stroke="#2563eb" strokeWidth={2} dot={false} activeDot={{ r: 5 }} />
+                    <Line type="monotone" dataKey="temp_minima" name="S1 Min" stroke="#93c5fd" strokeWidth={2} dot={false} />
 
-                    {/* Sensor 2 (Opcional: Si quieres mostrarlos. A veces ensucian mucho, los pondré punteados o colores distintos) */}
-                    <Line
-                        type="monotone"
-                        dataKey="temp_minima_2"
-                        name="T. Min (S2)"
-                        stroke="#60a5fa" // blue-400
-                        strokeDasharray="5 5"
-                        strokeWidth={1}
-                        dot={false}
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="temp_maxima_2"
-                        name="T. Max (S2)"
-                        stroke="#f87171" // red-400
-                        strokeDasharray="5 5"
-                        strokeWidth={1}
-                        dot={false}
-                    />
+                    <Line type="monotone" dataKey="temp_maxima_2" name="S2 Max" stroke="#059669" strokeWidth={2} dot={false} strokeDasharray="3 3" />
+                    <Line type="monotone" dataKey="temp_minima_2" name="S2 Min" stroke="#6ee7b7" strokeWidth={2} strokeDasharray="3 3" dot={false} />
 
+                    {/* ZOOM SLIDER (Brush) - Desactivado por causar error de re-renderizado infinito en algunos navegadores
+                    <Brush
+                        dataKey="label"
+                        height={30}
+                        stroke="#cbd5e1"
+                        fill="#f8fafc"
+                        tickFormatter={emptyTickFormatter}
+                    />
+                    */}
                 </LineChart>
             </ResponsiveContainer>
         </div>
