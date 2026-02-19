@@ -15,7 +15,7 @@ const IncubadoraUpload = () => {
   // Mapeo: IncubadoraID -> { id: InternalExcelID, keyword: FilenameKeyword }
   const INCUBATOR_MAPPING = {
     "INC.12 LAB.BAM.PM": { id: "PM.VIR-inc-01 ch1", keyword: "INC.12" },
-    "INC.07_06.LAB.CCE.PM": { id: "INC.06/LAB. CCE.PM", keyword: "INC.07" }, // O ajusta si el archivo dice 07_06
+    "INC.07_06.LAB.CCE.PM": { id: "INC.06/LAB. CCE.PM", keyword: "INC.07_06" }, 
     "INC.04.LAB.CCE.PM": { id: "PM.VIR-inc-01 ch1", keyword: "INC.04" }
   };
 
@@ -171,7 +171,7 @@ const IncubadoraUpload = () => {
         toast.info(msg);
       } else if (nuevosInsertados === 0 && omitidosDuplicados > 0) {
         // Caso Duplicados
-        msg = `ℹ️ Sin cambios: Todos los datos (${omitidosDuplicados}) ya existían en la base de datos.`;
+        msg = `Sin cambios: Todos los datos (${omitidosDuplicados}) ya existían en la base de datos.`;
         toast.warning(msg);
       } else {
         // Caso Raro (0 y 0)
