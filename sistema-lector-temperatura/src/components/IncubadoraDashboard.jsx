@@ -71,10 +71,15 @@ const IncubadoraDashboard = ({ data }) => {
             const data = payload[0].payload;
             const hora = formatTimeOnly(data.hora_intervalo); // Formatear hora
 
+            // Convertir YYYY-MM-DD a DD/MM/YYYY
+            const displayFecha = data.fecha && data.fecha.includes('-') && data.fecha.length === 10
+                ? `${data.fecha.split('-')[2]}/${data.fecha.split('-')[1]}/${data.fecha.split('-')[0]}`
+                : data.fecha;
+
             return (
                 <div className="bg-white p-3 border border-gray-200 shadow-md rounded-md text-sm">
                     <p className="font-bold text-gray-700 mb-2">
-                        {data.fecha} <span className="text-gray-500 font-normal">| {hora} hs</span>
+                        {displayFecha} <span className="text-gray-500 font-normal">| {hora} hs</span>
                     </p>
                     <p className="text-blue-600">Sensor 1: {data.var1} °C</p>
                     <p className="text-purple-600">Sensor 2: {data.var2} °C</p>
@@ -96,51 +101,53 @@ const IncubadoraDashboard = ({ data }) => {
         <div className="grid grid-cols-1 gap-8 mt-6">
 
             {/* GRÁFICO 3: ESTABILIDAD TÉRMICA (Variación Max - Min) */}
-            <div className="border-b pb-3 mb-4">
-                <h4 className="text-md font-bold text-gray-700">
-                    🌡️ Estabilidad Térmica (Variación Max - Min)
-                </h4>
-                <p className="text-xs text-gray-500 mt-1">
-                    Diferencia instantánea entre la temperatura más alta y más baja. Verde indica estabilidad (≤ 2°C).
-                </p>
-            </div>
-            <div className="h-72 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={stabilityData} barCategoryGap={1} barGap={0}>
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+            <div className="bg-white p-4 rounded-lg shadow border border-gray-100">
+                <div className="border-b pb-3 mb-4">
+                    <h4 className="text-md font-bold text-gray-700">
+                        🌡️ Estabilidad Térmica (Variación Max - Min)
+                    </h4>
+                    <p className="text-xs text-gray-500 mt-1">
+                        Diferencia instantánea entre la temperatura más alta y más baja. Verde indica estabilidad (≤ 2°C).
+                    </p>
+                </div>
+                <div className="h-72 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={stabilityData} barCategoryGap={1} barGap={0}>
+                            <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
 
-                        {/* 
+                            {/* 
                                 TRUCO: Usamos 'id_registro' (único) en el eje X para que CADA BARRA sea individual
                                 y tenga su propio Tooltip.
                                 Luego formateamos el tick para que visualmente solo muestre la fecha.
                             */}
-                        <XAxis
-                            dataKey="id_registro"
-                            tickFormatter={(val) => {
-                                // El ID es tipo: INC_DATE_TIME. Extraemos la fecha.
-                                // A veces el formato puede variar, pero intentamos extraer la fecha YYYY-MM-DD
-                                // Asumiendo formato: ALGO_YYYY-MM-DD_HH:MM
-                                const parts = val.split('_');
-                                // Buscamos la parte que parece una fecha (202X-XX-XX)
-                                const datePart = parts.find(p => p.includes('-') && p.length === 10);
-                                return datePart || val;
-                            }}
-                            tick={{ fontSize: 12 }}
-                            minTickGap={50} // Aumentado para que no se amontonen las fechas
-                        />
+                            <XAxis
+                                dataKey="id_registro"
+                                tickFormatter={(val) => {
+                                    // El ID es tipo: INC_DATE_TIME. Extraemos la fecha.
+                                    // A veces el formato puede variar, pero intentamos extraer la fecha YYYY-MM-DD
+                                    // Asumiendo formato: ALGO_YYYY-MM-DD_HH:MM
+                                    const parts = val.split('_');
+                                    // Buscamos la parte que parece una fecha (202X-XX-XX)
+                                    const datePart = parts.find(p => p.includes('-') && p.length === 10);
+                                    return datePart || val;
+                                }}
+                                tick={{ fontSize: 12 }}
+                                minTickGap={50} // Aumentado para que no se amontonen las fechas
+                            />
 
-                        <YAxis unit="°C" domain={[0, 5]} />
-                        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+                            <YAxis unit="°C" domain={[0, 5]} />
+                            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
 
-                        <ReferenceLine y={2} stroke="red" strokeDasharray="3 3" label="Límite 2°C" />
+                            <ReferenceLine y={2} stroke="red" strokeDasharray="3 3" label="Límite 2°C" />
 
-                        <Bar dataKey="maxVariation" name="Variación (Max - Min)">
-                            {stabilityData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.maxVariation > 2 ? '#ef4444' : '#10b981'} />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
+                            <Bar dataKey="maxVariation" name="Variación (Max - Min)">
+                                {stabilityData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.maxVariation > 2 ? '#ef4444' : '#10b981'} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
             </div>
         </div>
     );

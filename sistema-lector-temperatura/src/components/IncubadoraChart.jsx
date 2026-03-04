@@ -20,8 +20,8 @@ const IncubadoraChart = ({ data }) => {
         const reversed = [...data].reverse();
 
         return reversed.map(item => {
-            const datePart = item.fecha && item.fecha.length >= 5
-                ? item.fecha.substring(5)
+            const datePart = item.fecha && item.fecha.length === 10
+                ? `${item.fecha.substring(8, 10)}/${item.fecha.substring(5, 7)}/${item.fecha.substring(0, 4)}`
                 : item.fecha;
 
             let timePart = item.hora_intervalo || "";

@@ -77,7 +77,7 @@ const IncubadoraComparacion = ({ incubadoras }) => {
 
         const processItem = (item, suffix) => {
             const datePart = item.fecha && item.fecha.length === 10
-                ? `${item.fecha.substring(8, 10)}-${item.fecha.substring(5, 7)}`
+                ? `${item.fecha.substring(8, 10)}/${item.fecha.substring(5, 7)}/${item.fecha.substring(0, 4)}`
                 : item.fecha;
 
             let timePart = item.hora_intervalo || "";
