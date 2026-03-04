@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from "@/api/apiConfig";
 import IncubadoraChart from "./IncubadoraChart";
 import IncubadoraDashboard from "./IncubadoraDashboard";
-
-
+import IncubadoraComparacion from "./IncubadoraComparacion";
 
 const IncubadoraHistorial = () => {
     const [incubadoras, setIncubadoras] = useState([]);
@@ -14,7 +13,7 @@ const IncubadoraHistorial = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [globalRange, setGlobalRange] = useState({ min: null, max: null }); // Rango absoluto de datos
-    const [viewMode, setViewMode] = useState("table"); // 'table', 'dashboard'
+    const [viewMode, setViewMode] = useState("table"); // 'table', 'dashboard', 'compare'
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -321,6 +320,15 @@ const IncubadoraHistorial = () => {
                 >
                     📊 Dashboard Avanzado
                 </button>
+                <button
+                    onClick={() => setViewMode("compare")}
+                    className={`pb-2 px-4 text-sm font-medium transition-colors ${viewMode === "compare"
+                        ? "text-sky-600 border-b-2 border-sky-600"
+                        : "text-gray-500 hover:text-gray-700"
+                        }`}
+                >
+                    ⚖️ Comparación
+                </button>
             </div>
 
             {/* Mensajes de Estado */}
@@ -378,6 +386,10 @@ const IncubadoraHistorial = () => {
 
             {!loading && history.length > 0 && viewMode === 'dashboard' && (
                 <IncubadoraDashboard data={history} />
+            )}
+
+            {viewMode === 'compare' && (
+                <IncubadoraComparacion incubadoras={incubadoras} />
             )}
         </div>
     );

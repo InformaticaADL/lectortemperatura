@@ -50,7 +50,10 @@ const IncubadoraChart = ({ data }) => {
 
     return (
         <div className="w-full h-96 bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-10">
-            <h4 className="text-md font-semibold text-gray-700 mb-4">Tendencia de Temperaturas</h4>
+            <div className="mb-4">
+                <h4 className="text-md font-semibold text-gray-700">Tendencia de Temperaturas</h4>
+                <p className="text-xs text-gray-500 mt-1">Evolución de temperaturas máximas y mínimas por cada sensor.</p>
+            </div>
 
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart
