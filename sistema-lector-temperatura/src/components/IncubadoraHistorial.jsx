@@ -342,15 +342,14 @@ const IncubadoraHistorial = () => {
                                 <tr>
                                     <th scope="col" className="px-4 py-3">Fecha</th>
                                     <th scope="col" className="px-4 py-3">Hora</th>
-                                    <th scope="col" className="px-4 py-3 text-right">T. Min</th>
-                                    <th scope="col" className="px-4 py-3 text-right">T. Max</th>
-                                    <th scope="col" className="px-4 py-3 text-right">T. Min 2</th>
-                                    <th scope="col" className="px-4 py-3 text-right">T. Max 2</th>
-                                    <th scope="col" className="px-4 py-3 text-right">Puerta (s)</th>
-                                    <th scope="col" className="px-4 py-3 text-right">Motor</th>
-                                    <th scope="col" className="px-4 py-3 text-right">Red (s)</th>
-                                    <th scope="col" className="px-4 py-3 text-right">Alarma (s)</th>
-
+                                    <th scope="col" className="px-4 py-3 text-right">Min</th>
+                                    <th scope="col" className="px-4 py-3 text-right">Max</th>
+                                    <th scope="col" className="px-4 py-3 text-right">Min 2</th>
+                                    <th scope="col" className="px-4 py-3 text-right">Max 2</th>
+                                    <th scope="col" className="px-4 py-3 text-right">Tiempo Puerta</th>
+                                    <th scope="col" className="px-4 py-3 text-right">Tiempo Motor</th>
+                                    <th scope="col" className="px-4 py-3 text-right">Tiempo Red</th>
+                                    <th scope="col" className="px-4 py-3 text-right">Tiempo Alarma</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">

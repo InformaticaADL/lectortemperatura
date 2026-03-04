@@ -17,11 +17,9 @@ import {
 const IncubadoraDashboard = ({ data }) => {
     // 1. Preparar datos (orden ascending para gráficos de tiempo)
     const sortedData = useMemo(() => {
-        return [...data].sort((a, b) => {
-            const dateA = new Date(`${a.fecha}T${a.hora_intervalo || '00:00'}`);
-            const dateB = new Date(`${b.fecha}T${b.hora_intervalo || '00:00'}`);
-            return dateA - dateB;
-        });
+        // La API ya entrega los datos en orden descendente (el más reciente primero).
+        // Para que se grafiquen cronológicamente (más antiguos a la izquierda), invertimos el arreglo.
+        return [...data].reverse();
     }, [data]);
 
     // Helper para formatear hora
