@@ -458,11 +458,15 @@ const IncubadoraHistorial = () => {
                 )}
 
                 {!loading && history.length > 0 && viewMode === 'dashboard' && (
-                    <IncubadoraDashboard data={history} />
+                    <div id="chart-container-for-pdf">
+                        <IncubadoraDashboard data={history} />
+                    </div>
                 )}
 
                 {viewMode === 'compare' && (
-                    <IncubadoraComparacion incubadoras={incubadoras} />
+                    <div id="chart-container-for-pdf">
+                        <IncubadoraComparacion incubadoras={incubadoras} />
+                    </div>
                 )}
             </div>
         </div>
