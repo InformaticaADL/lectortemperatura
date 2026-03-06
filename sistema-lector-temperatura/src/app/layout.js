@@ -6,8 +6,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Screening ADL",
-  description: "Sistema Screening ADL",
+  title: "Lector Temperatura ADL",
+  description: "Sistema Lector Temperatura ADL",
 };
 
 const RootLayout = ({ children }) => {
