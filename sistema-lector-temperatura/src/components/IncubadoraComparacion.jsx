@@ -11,6 +11,17 @@ import {
 } from 'recharts';
 import api from "@/api/apiConfig";
 
+const formatTime = (timeStr) => {
+    if (!timeStr) return "-";
+    if (timeStr.includes("T")) {
+        return timeStr.split("T")[1].substring(0, 5);
+    }
+    if (timeStr.length >= 5) {
+        return timeStr.substring(0, 5);
+    }
+    return timeStr;
+};
+
 const IncubadoraComparacion = ({ incubadoras }) => {
     const [incA, setIncA] = useState("");
     const [incB, setIncB] = useState("");
@@ -222,8 +233,73 @@ const IncubadoraComparacion = ({ incubadoras }) => {
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
+
+                {/* TABLAS DETALLADAS DE COMPARACIÓN */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                {/* Tabla A */}
+                <div>
+                    <h5 className="text-sm font-bold text-sky-700 mb-3 border-b pb-1">
+                        Detalle: {incA}
+                    </h5>
+                    <div className="overflow-x-auto border border-gray-100 rounded-lg max-h-96 overflow-y-auto">
+                        <table className="min-w-full divide-y divide-gray-200 text-[10px] text-left">
+                            <thead className="bg-sky-50 sticky top-0">
+                                <tr>
+                                    <th className="px-2 py-2">Fecha/Hora</th>
+                                    <th className="px-1 py-2 text-right">Min1</th>
+                                    <th className="px-1 py-2 text-right">Max1</th>
+                                    <th className="px-1 py-2 text-right">Min2</th>
+                                    <th className="px-1 py-2 text-right">Max2</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-100">
+                                {dataA.map((row) => (
+                                    <tr key={`rowA-${row.id_registro}`} className="hover:bg-gray-50">
+                                        <td className="px-2 py-1.5 whitespace-nowrap font-medium">{row.fecha} {formatTime(row.hora_intervalo)}</td>
+                                        <td className="px-1 py-1.5 text-right text-blue-500 font-bold">{row.temp_minima}</td>
+                                        <td className="px-1 py-1.5 text-right text-blue-800 font-bold">{row.temp_maxima}</td>
+                                        <td className="px-1 py-1.5 text-right text-emerald-500">{row.temp_minima_2}</td>
+                                        <td className="px-1 py-1.5 text-right text-emerald-800">{row.temp_maxima_2}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Tabla B */}
+                <div>
+                    <h5 className="text-sm font-bold text-orange-600 mb-3 border-b pb-1">
+                        Detalle: {incB}
+                    </h5>
+                    <div className="overflow-x-auto border border-gray-100 rounded-lg max-h-96 overflow-y-auto">
+                        <table className="min-w-full divide-y divide-gray-200 text-[10px] text-left">
+                            <thead className="bg-orange-50 sticky top-0">
+                                <tr>
+                                    <th className="px-2 py-2">Fecha/Hora</th>
+                                    <th className="px-1 py-2 text-right">Min1</th>
+                                    <th className="px-1 py-2 text-right">Max1</th>
+                                    <th className="px-1 py-2 text-right">Min2</th>
+                                    <th className="px-1 py-2 text-right">Max2</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-100">
+                                {dataB.map((row) => (
+                                    <tr key={`rowB-${row.id_registro}`} className="hover:bg-gray-50">
+                                        <td className="px-2 py-1.5 whitespace-nowrap font-medium">{row.fecha} {formatTime(row.hora_intervalo)}</td>
+                                        <td className="px-1 py-1.5 text-right text-blue-500 font-bold">{row.temp_minima}</td>
+                                        <td className="px-1 py-1.5 text-right text-blue-800 font-bold">{row.temp_maxima}</td>
+                                        <td className="px-1 py-1.5 text-right text-emerald-500">{row.temp_minima_2}</td>
+                                        <td className="px-1 py-1.5 text-right text-emerald-800">{row.temp_maxima_2}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             ) : (
-                !loading && <div className="text-center text-gray-400 py-20 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">Seleccione parámetros y presione Comparar</div>
+            !loading && <div className="text-center text-gray-400 py-20 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">Seleccione parámetros y presione Comparar</div>
             )}
         </div>
     );
