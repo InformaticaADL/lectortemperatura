@@ -50,18 +50,18 @@ const Login = () => {
       if (response.status === 200) {
         const data = response.data;
         
-        // Verificamos primero si es INF antes de guardar cookies y redireccionar
-        if (data.seccion === "INF") {
+        // Verificamos primero si es INF o APO antes de guardar cookies y redireccionar
+        if (data.seccion === "INF" || data.seccion === "APO") {
             Cookies.set("token", data.token);
             Cookies.set("usuario", data.username);
             Cookies.set("id", data.id_usuario);
             Cookies.set("seccion", data.seccion);
             Cookies.set('userEmail', data.email);
             
-            router.push("/incubadora");
+            router.push("/menu");
         } else {
-            // Si el usuario existe pero no es de la sección INF
-            setError("Acceso denegado: No pertenece a la sección Incubadora.");
+            // Si el usuario existe pero no es de la sección INF ni APO
+            setError("Acceso denegado: No pertenece a la sección INF o APO.");
         }
 
       } else {
@@ -108,7 +108,7 @@ const Login = () => {
             INICIO DE SESIÓN
           </h2>
           <h3 className="text-lg font-bold text-center text-sky-800 mb-4">
-            SISTEMA DE INCUBADORA
+            REGISTRO DE TEMPERATURA
           </h3>
 
           <p

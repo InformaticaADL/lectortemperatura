@@ -15,19 +15,25 @@ export default function PageSubir() {
     const { sessionModalVisible, handleSessionModalOk } = useTokenVerification();
     const router = useRouter();
 
-    return (
-        <div className="flex w-full min-h-screen items-start text-sky-900 flex-col p-4">
-            <div className="w-full mb-4">
-                <button
-                    onClick={() => router.push('/incubadora')}
-                    className="flex items-center gap-2 text-sky-700 bg-sky-50 hover:bg-sky-100 px-4 py-2 rounded-lg transition-colors font-medium text-sm shadow-sm border border-sky-100"
-                >
-                    <span className="text-lg">←</span> Volver al Menú
-                </button>
-            </div>
+    useEffect(() => {
+        const seccion = Cookies.get("seccion");
+        if (seccion !== "INF") {
+            router.push("/menu");
+        }
+    }, [router]);
 
-            <div className="w-full flex justify-center mt-4">
-                <IncubadoraUpload />
+    return (
+        <div className="flex w-full min-h-screen items-start text-sky-900 flex-col p-0">
+            <div className="w-full flex justify-center mt-8 px-4 md:px-8">
+                <IncubadoraUpload backButton={
+                    <button
+                        onClick={() => router.push('/incubadora')}
+                        className="group flex items-center gap-1.5 text-slate-500 hover:text-sky-600 bg-transparent hover:bg-sky-50 px-3 py-1.5 rounded-full transition-all text-sm font-semibold tracking-wide w-fit border border-transparent hover:border-sky-100 -ml-3"
+                    >
+                        <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Volver al Menú
+                    </button>
+                } />
             </div>
 
             <SessionExpiredModal

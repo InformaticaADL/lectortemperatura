@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 dayjs.extend(utc);
 
-const IncubadoraUpload = () => {
+const IncubadoraUpload = ({ backButton }) => {
   const [loading, setLoading] = useState(false);
   const [log, setLog] = useState("");
   const [incubadoraId, setIncubadoraId] = useState("INC.12 LAB.BAM.PM");
@@ -192,6 +192,7 @@ const IncubadoraUpload = () => {
 
   return (
     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md max-w-lg w-full">
+      {backButton && <div className="mb-2">{backButton}</div>}
       <h3 className="text-lg font-bold mb-4 text-sky-900 border-b pb-2">
         Importar Datos Incubadora (Excel)
       </h3>

@@ -4,9 +4,19 @@ import React from "react";
 import { useAuth } from "../hooks/useAuth";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
     const { user, logout } = useAuth();
+    const pathname = usePathname();
+
+    // Determinar la sección actual para los enlaces de navegación
+    const isApoyo = pathname.startsWith('/apoyo');
+    const isIncubadora = pathname.startsWith('/incubadora');
+    const basePath = isApoyo ? '/apoyo' : '/incubadora';
+    
+    // Solo mostrar los botones si estamos dentro de apoyo o incubadora
+    const showNavButtons = isApoyo || isIncubadora;
 
     return (
         <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -14,7 +24,7 @@ const Header = () => {
                 <div className="flex items-center justify-between h-24">
                     {/* Logo */}
                     <div className="flex items-center gap-4">
-                        <Link href="/incubadora" className="cursor-pointer">
+                        <Link href="/menu" className="cursor-pointer">
                             <div className="relative w-auto h-20">
                                 <img
                                     src="/images/logo_adl.png"
@@ -31,12 +41,12 @@ const Header = () => {
                     {/* Right Side: Links + User Profile */}
                     <div className="flex items-center gap-6">
 
-                        {user && (
+                        {user && showNavButtons && (
                             <>
-                                <Link href="/incubadora/subir" className="px-5 py-2.5 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors shadow-sm font-medium text-sm block">
-                                    Subir Temperatura
+                                <Link href={`${basePath}/subir`} className={`px-5 py-2.5 ${isApoyo ? 'bg-teal-600 hover:bg-teal-700' : 'bg-sky-600 hover:bg-sky-700'} text-white rounded-lg transition-colors shadow-sm font-medium text-sm block`}>
+                                    Subir Archivo
                                 </Link>
-                                <Link href="/incubadora/historial" className="px-5 py-2.5 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm font-medium text-sm block">
+                                <Link href={`${basePath}/historial`} className="px-5 py-2.5 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm font-medium text-sm block">
                                     Historial
                                 </Link>
                             </>

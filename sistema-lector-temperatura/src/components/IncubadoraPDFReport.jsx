@@ -46,8 +46,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     chartImage: {
-        width: '100%',
-        height: 'auto',
+        width: 535, // Ancho fijo ajustado a los márgenes de la página A4
+        height: 250, // Alto fijo
+        objectFit: 'contain', // Asegura que la imagen no se deforme
+        alignSelf: 'center', // Centra la imagen horizontalmente
         borderRadius: 4,
         marginBottom: 10,
     },
@@ -149,7 +151,7 @@ const IncubadoraPDFReport = ({ data, chartImageBase64, incubadoraName, startDate
                 {/* GRÁFICO (IMAGEN) */}
                 {chartImageBase64 && (
                     <View style={styles.section}>
-                        <Text style={[styles.title, { fontSize: 14, marginBottom: 8 }]}>Gráfico de Tendencia</Text>
+                        <Text style={[styles.title, { fontSize: 14, marginBottom: 8 }]}>Historial Gráfico de Temperaturas</Text>
                         <Image style={styles.chartImage} src={chartImageBase64} />
                     </View>
                 )}

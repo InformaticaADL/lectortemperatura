@@ -12,6 +12,7 @@ db.Termografo = require('./Termografo')(sequelize, DataTypes);
 db.Usuario = require('./Usuario')(sequelize, DataTypes);
 db.ZonaGeografica = require('./ZonaGeografica')(sequelize, DataTypes);
 db.IncubadoraData = require('./IncubadoraData')(sequelize, DataTypes);
+db.ApoyoData = require('./ApoyoData')(sequelize, DataTypes);
 
 // Ejecutar asociaciones
 Object.values(db).forEach((model) => {

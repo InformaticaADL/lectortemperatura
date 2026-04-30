@@ -8,16 +8,22 @@ import { pdf } from '@react-pdf/renderer';
 import IncubadoraPDFReport from './IncubadoraPDFReport';
 import { saveAs } from 'file-saver';
 
-const IncubadoraHistorial = () => {
+const IncubadoraHistorial = ({ backButton }) => {
     const [incubadoras, setIncubadoras] = useState([]);
     const [selectedIncubadora, setSelectedIncubadora] = useState("");
-    const [selectedYear, setSelectedYear] = useState("2026");
+    
+    // Inicializar fechas con el año actual sincronamente para evitar cargar todo al inicio
+    const today = new Date();
+    const currentYearStr = String(today.getFullYear());
+    const todayStr = today.toISOString().split('T')[0];
+
+    const [selectedYear, setSelectedYear] = useState(currentYearStr);
     const [availableYears, setAvailableYears] = useState([]);
     const [history, setHistory] = useState([]);
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [globalRange, setGlobalRange] = useState({ min: null, max: null }); // Rango absoluto de datos
-    const [viewMode, setViewMode] = useState("table"); // 'table', 'dashboard', 'compare'
+    const [startDate, setStartDate] = useState(`${currentYearStr}-01-01`);
+    const [endDate, setEndDate] = useState(todayStr);
+    const [globalRange, setGlobalRange] = useState({ min: null, max: null });
+    const [viewMode, setViewMode] = useState("table");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -236,6 +242,7 @@ const IncubadoraHistorial = () => {
 
     return (
         <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md w-full">
+            {backButton && <div className="mb-2">{backButton}</div>}
             <h3 className="text-lg font-bold mb-4 text-sky-900 border-b pb-2">
                 Historial de Temperaturas
             </h3>
@@ -382,22 +389,24 @@ const IncubadoraHistorial = () => {
                 </div>
 
                 <div className="flex gap-2">
-                    <button
-                        onClick={exportToPDF}
-                        disabled={isExporting}
-                        className={`flex items-center gap-2 mb-2 ${isExporting ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'} text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors shadow-sm`}
-                        title="Exportar Reporte Completo a PDF con Logo"
-                    >
-                        {isExporting ? (
-                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        ) : (
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        )}
-                        {isExporting ? 'Generando PDF...' : 'Exportar PDF'}
-                    </button>
+                    {viewMode !== 'compare' && (
+                        <button
+                            onClick={exportToPDF}
+                            disabled={isExporting}
+                            className={`flex items-center gap-2 mb-2 ${isExporting ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'} text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors shadow-sm`}
+                            title="Exportar Reporte Completo a PDF con Logo"
+                        >
+                            {isExporting ? (
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            ) : (
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            )}
+                            {isExporting ? 'Generando PDF...' : 'Exportar PDF'}
+                        </button>
+                    )}
                 </div>
             </div>
 
