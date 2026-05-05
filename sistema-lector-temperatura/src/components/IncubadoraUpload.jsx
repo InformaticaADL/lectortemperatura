@@ -7,10 +7,10 @@ import { toast } from 'react-toastify';
 
 dayjs.extend(utc);
 
-const IncubadoraUpload = ({ backButton }) => {
+const IncubadoraUpload = ({ backButton, allowedIncubators }) => {
   const [loading, setLoading] = useState(false);
   const [log, setLog] = useState("");
-  const [incubadoraId, setIncubadoraId] = useState("INC.12 LAB.BAM.PM");
+  const [incubadoraId, setIncubadoraId] = useState(allowedIncubators && allowedIncubators.length > 0 ? allowedIncubators[0] : "INC.12 LAB.BAM.PM");
 
   // Mapeo: IncubadoraID -> { id: InternalExcelID, keyword: FilenameKeyword }
   const INCUBATOR_MAPPING = {
@@ -209,9 +209,9 @@ const IncubadoraUpload = ({ backButton }) => {
             onChange={(e) => setIncubadoraId(e.target.value)}
             className="block w-full border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm p-2 border bg-gray-50"
           >
-            <option value="INC.12 LAB.BAM.PM">INC.12 LAB.BAM.PM</option>
-            <option value="INC.07_06.LAB.CCE.PM">INC.07_06.LAB.CCE.PM</option>
-            <option value="INC.04.LAB.CCE.PM">INC.04.LAB.CCE.PM</option>
+            {(allowedIncubators || Object.keys(INCUBATOR_MAPPING)).map((id) => (
+              <option key={id} value={id}>{id}</option>
+            ))}
           </select>
           <p className="text-xs text-gray-500 mt-1">
             Revisar que el archivo Excel tenga las columnas esperadas (Fecha, Intervalo, Temps, Tiempos, Obs).

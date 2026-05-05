@@ -25,7 +25,9 @@ export default function PageSubir() {
     return (
         <div className="flex w-full min-h-screen items-start text-sky-900 flex-col p-0">
             <div className="w-full flex justify-center mt-8 px-4 md:px-8">
-                <IncubadoraUpload backButton={
+                <IncubadoraUpload 
+                    allowedIncubators={['INC.07_06.LAB.CCE.PM', 'INC.04.LAB.CCE.PM']}
+                    backButton={
                     <button
                         onClick={() => router.push('/incubadora')}
                         className="group flex items-center gap-1.5 text-slate-500 hover:text-sky-600 bg-transparent hover:bg-sky-50 px-3 py-1.5 rounded-full transition-all text-sm font-semibold tracking-wide w-fit border border-transparent hover:border-sky-100 -ml-3"

@@ -8,7 +8,7 @@ import { pdf } from '@react-pdf/renderer';
 import IncubadoraPDFReport from './IncubadoraPDFReport';
 import { saveAs } from 'file-saver';
 
-const IncubadoraHistorial = ({ backButton }) => {
+const IncubadoraHistorial = ({ backButton, allowedIncubators }) => {
     const [incubadoras, setIncubadoras] = useState([]);
     const [selectedIncubadora, setSelectedIncubadora] = useState("");
     
@@ -73,9 +73,13 @@ const IncubadoraHistorial = ({ backButton }) => {
         const fetchIncubadoras = async () => {
             try {
                 const res = await api.get('/incubadora/list');
-                setIncubadoras(res.data);
-                if (res.data.length > 0) {
-                    setSelectedIncubadora(res.data[0]);
+                let fetchedIncubadoras = res.data;
+                if (allowedIncubators && allowedIncubators.length > 0) {
+                    fetchedIncubadoras = fetchedIncubadoras.filter(inc => allowedIncubators.includes(inc));
+                }
+                setIncubadoras(fetchedIncubadoras);
+                if (fetchedIncubadoras.length > 0) {
+                    setSelectedIncubadora(fetchedIncubadoras[0]);
                 }
             } catch (err) {
                 console.error("Error cargando incubadoras", err);
